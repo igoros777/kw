@@ -43,7 +43,7 @@ function func_configure() {
   fi
   #
   mail_subject="${this_host} generated an event at ${this_time}"
-  mail_recipients="ioseled1@cscinfo.com"
+  mail_recipients="you@domain.com"
 }
 
 function func_systemctl_check() {
