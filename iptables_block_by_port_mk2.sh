@@ -29,36 +29,24 @@ function func_configure() {
   this_script_full="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
   this_host=$(hostname | awk -F'.' '{print $1}')
   this_time=$(date +'%Y-%m-%d %H:%M:%S')
-  mail_to="mailto@domain.com"
-  mail_from="mailfrom@domain.com"
+  mail_to="ichmod444@gmail.com"
+  mail_from="igor@comradegeneral.com"
   mail_subject="Alert from ${this_host}:${this_script_full} at ${this_time}"
 
   # When blacklisting IPs, a comment will be added to the iptables rule. The comment will
   # consist of an epoch timestamp set ${jailtime} days in the future. This gives you an
-  # opportunity to blacklist IPs temporarily. You can whitelist them by running the following
-  # short script from cron:
-  # ----------------------
-  # iptables -S | egrep '[0-9]{10,}' | while read i
-  # do
-  #   if [ $(echo ${i} | egrep -o '[0-9]{10,}') -lt $(date +'%s') ]
-  #   then
-  #     echo "Dropping expired rule: ${i}"
-  #     j="$(echo ${i} | sed 's/\-A/\-D/g')"
-  #     iptables $(eval echo $j)
-  #   fi
-  # done && service iptables save
-  # ----------------------
-  # If you don't require this feature, set this variable to 0
+  # opportunity to blacklist IPs temporarily. If you don't require this feature, set this
+  # variable to 0
   jailtime=5
 
   # Either specify the target IP or have it set to your external Internet IP. This may
   # be useful if you don't have a static IP.
-  target_ips="72.94.59.26"
+  target_ips="72.92.62.32"
   #target_ips="$(wget http://ipecho.net/plain -O - -q ; echo)"
 
   # Specify target ports or have them set dynamically by running nmap against your
   # primary IP set in the previous step.
-  target_ports="21|53|80|135|443|44443|48080"
+  target_ports="21|53|80|135|443|444543|48090"
   #target_ports="$(nmap $target_ips 2>/dev/null | grep -oP "(?<=^)[0-9]{1,5}(?=\/)" | xargs | sed 's/ /|/g')"
 
   # The threshold in this case is entirely arbitrary. You'd have to set it according to how
@@ -84,6 +72,9 @@ function func_configure() {
   tmpfile=$(mktemp)
   i=0; echo "${i}" > ${tmpfile}
 
+  tmpfile3=$(mktemp)
+  k=0; echo "${k}" > ${tmpfile3}
+
   # Add to whitelist whatever IPs you have listed in /etc/hosts.allow
   whitelist="$(grep -oE "([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})" /etc/hosts.allow 2>/dev/null | \
   sort -V | uniq | xargs | sed 's/ /|/g')"
@@ -97,7 +88,7 @@ function func_configure() {
   # Here you can enter names of organizations (or whatever other strings) that may appear
   # in the output of the geoiplookup command. This allows you to whitelist IPs belonging
   # to a particular organization or geographic location
-  org_whitelist="Pennsylvania, Scranton|Google|GOOGLE"
+  org_whitelist="Delaware, Wilmington|Google"
 }
 
 function func_log_scan() {
@@ -140,10 +131,27 @@ function func_log_scan() {
   done
 }
 
+function func_unblock() {
+  if [ ${jailtime} -gt 0 ]
+  then
+    /sbin/iptables -S | grep -E 'comment.*"[0-9]{10,}"' | while read l
+    do
+     if [ $(echo ${l} | grep -oE '[0-9]{10,}') -lt $(date +'%s') ]
+     then
+       echo "${this_script} is dropping expired firewall block: ${l}"
+       j="$(echo ${l} | sed 's/\-A/\-D/g')"
+       /sbin/iptables $(eval echo $j)
+       (( k = k + 1 ))
+       echo "${k}" > ${tmpfile3}
+     fi
+    done
+  fi
+}
+
 function func_iptables_save() {
   # If iptables configuration was modified, removes any duplicates and save it.
   # After saving, reload iptables service and send an email to the administrator.
-  if [ $(cat ${tmpfile}) -gt 0 ]
+  if [ $(cat ${tmpfile}) -gt 0 ] || [ $(cat ${tmpfile3}) -gt 0 ]
   then
     tmpfile2=$(mktemp)
     /sbin/service iptables save 2>/dev/null 1>$2
@@ -160,7 +168,7 @@ function func_iptables_save() {
 
 function func_cleanup() {
   # Clean up any lingering temp files
-  /bin/rm -f ${tmpfile} ${tmpfile2} 2>/dev/null
+  /bin/rm -f ${tmpfile} ${tmpfile2} ${tmpfile3} 2>/dev/null
 }
 
 # ----------------------------------------------------------------------------
@@ -172,5 +180,6 @@ function func_cleanup() {
 # ----------------------------------------------------------------------------
 func_configure
 func_log_scan
+func_unblock
 func_iptables_save
 func_cleanup
