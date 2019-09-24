@@ -46,7 +46,7 @@ function func_configure() {
 
   # Specify target ports or have them set dynamically by running nmap against your
   # primary IP set in the previous step.
-  target_ports="21|53|80|135|443|444543|48090"
+  target_ports="21|53|80|135|443|44543|48090"
   #target_ports="$(nmap $target_ips 2>/dev/null | grep -oP "(?<=^)[0-9]{1,5}(?=\/)" | xargs | sed 's/ /|/g')"
 
   # The threshold in this case is entirely arbitrary. You'd have to set it according to how
