@@ -29,7 +29,7 @@ function func_configure() {
   this_script_full="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
   this_host=$(hostname | awk -F'.' '{print $1}')
   this_time=$(date +'%Y-%m-%d %H:%M:%S')
-  mail_to="ichmod444@gmail.com"
+  mail_to="igor@comradegeneral.com"
   mail_from="igor@comradegeneral.com"
   mail_subject="Alert from ${this_host}:${this_script_full} at ${this_time}"
 
