@@ -13,7 +13,7 @@ configure() {
 	tmpfile="/tmp/imdb-mf_${RANDOM}.tmp"
 	#LYNX="lynx -connect_timeout=10 --source"
 	#LYNX="curl -m10 -k -s0"
-	LYNX="wget --no-check-certificate --timeout=1 --tries=5 --retry-connrefused -U \"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)\" -qO-"
+	LYNX="wget --max-redirect=30 --no-check-certificate --timeout=1 --tries=5 --retry-connrefused -U \"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)\" -qO-"
 	base_url_imdb="https://www.imdb.com/search/title"
 	base_url_google="https://www.google.com/search"
 }
@@ -41,7 +41,7 @@ get_imdb() {
 
 parse_imdb() {
 	year="$(grep -m 1 "\/year\/" "${tmpfile}" | grep -Eo "[0-9]{4}")"
-	title="$(grep -m 1 "og:title" "${tmpfile}" | grep -Eo '\".*\"' | sed -e 's/"//g' | sed 's/ - IMDb//g' | sed -r 's/ \([0-9]{4}\)//g')"
+	title="$(grep -m 1 "og:title" "${tmpfile}" | grep -Eo '\".*\"' | sed -e 's/"//g' | sed 's/ - IMDb//g' | sed -r 's/ \([0-9]{4}\)//g' | sed 's@/@ @g')"
 	temp="$(grep "og:description" "${tmpfile}" | sed -e 's/content="/@/g' -e 's/" \/>/@/g' -e 's/\&quot;/\"/g' | awk -F'@' '{print $(NF-1)}')"
 	director="$(echo ${temp} | grep -oP "(?<=Directed by ).*?(?=\. With)")"
 	cast="$(echo ${temp} | grep -oP "(?<=\. With ).* ?(?=\. [A-Z0-9])" | sed -r 's/([A-Z]{1})\./\1@/g' | awk -F'.' '{print $1}' | sed -r 's/@/\./g')"
@@ -61,7 +61,8 @@ get_imdb2() {
 get_imdb3() {
 	if [ -z "${year}" ]
 	then
-		${LYNX} "https://www.google.com/search?q=site:imdb.com+%22${t}%22&btnI" > ${tmpfile} 2> /dev/null
+		#${LYNX} "https://www.google.com/search?q=site:imdb.com+%22${t}%22&btnI" > ${tmpfile} 2> /dev/null
+		${LYNX} "$(${LYNX} "https://www.google.com/search?q=site:imdb.com+${t} (${y})&btnI" 2>/dev/null | grep -oE "(https?|ftps?)://[^\<\>\"\' ]+" | grep imdb | tail -1)" > ${tmpfile} 2> /dev/null
 		parse_imdb
 	fi
 }
@@ -85,9 +86,9 @@ print_imdb() {
 
 configure
 cleanup
-get_imdb
-parse_imdb
-get_imdb2
+#get_imdb
+#parse_imdb
+#get_imdb2
 get_imdb3
 print_imdb
 cleanup
