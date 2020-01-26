@@ -14,7 +14,7 @@
   do
     pygmentize -O "style=monokai,fontface=DejaVu Sans Mono,fontsize=24" -f "${fmt}" \
     -l ${lang} -o "${target_path}/$(basename -- "${f%.*}").${fmt}" "${f}" 2>/dev/null
-    inkscape -z -D --export-area-snap -w ${wsize} \
+    inkscape -z -D --export-area-snap -b '#272822' -w ${wsize} \
     "${target_path}/$(basename -- "${f%.*}").${fmt}" \
     -e "${target_path}/$(basename -- "${f%.*}").${out}" 2>/dev/null
     /bin/rm "${target_path}/$(basename -- "${f%.*}").${fmt}" 2>/dev/null
