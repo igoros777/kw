@@ -17,7 +17,7 @@
     inkscape -z -D --export-area-snap -b '#272822' -w ${wsize} \
     "${target_path}/$(basename -- "${f%.*}").${fmt}" \
     -e "${target_path}/$(basename -- "${f%.*}").${out}" 2>/dev/null
-    mogrify -path "${target_path}" -bordercolor '#272822' -border 20 \
+    mogrify -path "${target_path}" -bordercolor '#272822' -border 40 \
     -format png "${target_path}/$(basename -- "${f%.*}").${out}"
     /bin/rm "${target_path}/$(basename -- "${f%.*}").${fmt}" 2>/dev/null
   done
