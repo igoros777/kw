@@ -31,3 +31,6 @@ Kubuntu
 Firefox
 ElementaryOS
 Chromium
+Perl
+Python
+InfoSec
