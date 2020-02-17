@@ -71,3 +71,7 @@ reposync
 SystemAdministrator
 armfedora
 scripting
+DevOps
+DevSecOps
+Linkerd
+OpenShift
