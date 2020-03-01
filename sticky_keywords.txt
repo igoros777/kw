@@ -160,3 +160,7 @@ Zorin Grid
 zorinos
 zorin os
 Zorin OS
+OpenSSH
+OpenVPN
+NetBackup
+VMDK
