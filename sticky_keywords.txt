@@ -1,0 +1,162 @@
+AI
+AMD
+Ansible
+Argonne National Laboratory
+Artificial Intelligence
+bash script
+BlackHole
+business continuity
+CamuBot
+CentOS
+centos 6
+centos 7
+centos 8
+CERN
+Chromebook
+Chromium
+Chromium Edge
+Cisco
+CLI
+cmputer virus
+coder
+coding
+command line
+command-line
+communication
+computer engineering
+computer science
+container
+cyberattack
+cybersecurity
+data protection
+data science
+Debian
+deepfake
+Dell
+desktop Linux
+DIQKD
+DNS
+Docker
+Elementary
+elementary OS
+Elementary OS
+encryption
+engineering
+Evernote
+extortion attack
+facial recognition
+Firefox
+FOSS
+FTL
+GnuPG
+Goodle Chrome
+Google
+GPG
+hacker
+hacking
+HP
+HP Dragonfly
+hydrodynamics
+IBM
+Immutable Linux
+information security
+infosec
+Intel
+iptables
+IT
+IT Security
+KDE
+kernel
+Kernel
+Kubernetes
+Kubuntu
+Kubuntu Focus
+LibreOffice
+Linux
+Linux Mint
+LPIC
+macOS
+MacOS
+malware
+materials science
+mechanical engineering
+Medtronic
+Microsoft
+MIT
+Netflix
+networking
+Networking
+OpenShift
+opensource
+open source
+open-source
+Opensource
+Open Source
+Palantir
+peneteration testing
+pentest
+physics
+piezoelectric
+privacy
+programmer
+programming
+Proton Synchrotron Booster
+quantum computation
+quantum computers
+quantum computing
+Quantum Key Distribution
+quantum mechanics
+quantum physics
+quantum walk
+ransomware
+Raspberry
+Raspberry Pi
+Raspbian
+Red Hat
+Red Hat Enterprise Linux
+RHCE
+RHEL
+rhel 6
+rhel 7
+rhel 8
+risk management
+SaltStack
+security
+Security
+semiconductors
+shell script
+Shell script
+sles
+sles 11
+sles 12
+sles 13
+SSH
+sshd
+Surveillance
+suse
+Suse
+SuSE
+SUSE
+sysadmin
+Sysadmin
+SysAdmin
+syslog
+systemd
+trojan
+ubuntu
+Ubuntu
+University of Cambridge
+University of Rochester
+Unix
+Valve
+webdev
+Web developer
+Web development
+Windows
+Windows 10
+Windows 7
+XPS13
+Zorin Grid
+zorinos
+zorin os
+Zorin OS
