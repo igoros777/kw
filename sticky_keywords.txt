@@ -1,11 +1,13 @@
 AI
 AMD
 Ansible
+Apple
 Argonne National Laboratory
 Artificial Intelligence
 bash script
 BlackHole
 business continuity
+Call of Duty
 CamuBot
 CentOS
 centos 6
@@ -17,7 +19,9 @@ Chromium
 Chromium Edge
 Cisco
 CLI
+Cloud Snooper
 cmputer virus
+CoD
 coder
 coding
 command line
@@ -26,6 +30,7 @@ communication
 computer engineering
 computer science
 container
+Coronavirus
 cyberattack
 cybersecurity
 data protection
@@ -40,14 +45,21 @@ Docker
 Elementary
 elementary OS
 Elementary OS
+Elon Musk
 encryption
 engineering
 Evernote
 extortion attack
 facial recognition
+Final Fantasy
 Firefox
+foldable
 FOSS
 FTL
+Galaxy Fold
+Galaxy S20
+Galaxy S20 Ultra
+Galaxy Z Flip
 GnuPG
 Goodle Chrome
 Google
@@ -62,6 +74,7 @@ Immutable Linux
 information security
 infosec
 Intel
+iPhone 12
 iptables
 IT
 IT Security
@@ -83,15 +96,21 @@ mechanical engineering
 Medtronic
 Microsoft
 MIT
+Motorola
+Motorola Razr
+NetBackup
 Netflix
 networking
 Networking
+Nintendo
 OpenShift
 opensource
 open source
 open-source
 Opensource
 Open Source
+OpenSSH
+OpenVPN
 Palantir
 peneteration testing
 pentest
@@ -101,6 +120,9 @@ privacy
 programmer
 programming
 Proton Synchrotron Booster
+PS4
+PS4 Pro
+PS5
 quantum computation
 quantum computers
 quantum computing
@@ -112,6 +134,8 @@ ransomware
 Raspberry
 Raspberry Pi
 Raspbian
+Razr
+Reddit
 Red Hat
 Red Hat Enterprise Linux
 RHCE
@@ -121,6 +145,7 @@ rhel 7
 rhel 8
 risk management
 SaltStack
+Samsung
 security
 Security
 semiconductors
@@ -130,8 +155,15 @@ sles
 sles 11
 sles 12
 sles 13
+smartphone
+SN01
+SN02
+Sony
+SpaceX
 SSH
 sshd
+Starship
+sudo
 Surveillance
 suse
 Suse
@@ -142,6 +174,7 @@ Sysadmin
 SysAdmin
 syslog
 systemd
+TikTok
 trojan
 ubuntu
 Ubuntu
@@ -149,18 +182,19 @@ University of Cambridge
 University of Rochester
 Unix
 Valve
+VMDK
+vulnerability
 webdev
 Web developer
 Web development
+Wii
 Windows
 Windows 10
 Windows 7
+Xbox
+Xbox One X
+Xbox Series X
 XPS13
 Zorin Grid
 zorinos
-zorin os
 Zorin OS
-OpenSSH
-OpenVPN
-NetBackup
-VMDK
