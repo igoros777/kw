@@ -1,11 +1,13 @@
 AI
 AMD
+anonymous
 Ansible
 Apple
 Argonne National Laboratory
 Artificial Intelligence
 bash script
 BlackHole
+Bluetooth
 business continuity
 Call of Duty
 CamuBot
@@ -22,16 +24,21 @@ CLI
 Cloud Snooper
 cmputer virus
 CoD
+code
 coder
 coding
 command line
 command-line
 communication
+computer
 computer engineering
 computer science
 container
 Coronavirus
+cryptojacking
+cyber
 cyberattack
+cybercrime
 cybersecurity
 data protection
 data science
@@ -39,6 +46,7 @@ Debian
 deepfake
 Dell
 desktop Linux
+developer
 DIQKD
 DNS
 Docker
@@ -47,12 +55,17 @@ elementary OS
 Elementary OS
 Elon Musk
 encryption
+endpoint
 engineering
+ethical hacker
+ethical hacking
 Evernote
+exploit
 extortion attack
 facial recognition
 Final Fantasy
 Firefox
+firewall
 foldable
 FOSS
 FTL
@@ -60,6 +73,7 @@ Galaxy Fold
 Galaxy S20
 Galaxy S20 Ultra
 Galaxy Z Flip
+geek
 GnuPG
 Goodle Chrome
 Google
@@ -78,6 +92,9 @@ iPhone 12
 iptables
 IT
 IT Security
+java
+javascript
+Kali Linux
 KDE
 kernel
 Kernel
@@ -86,7 +103,15 @@ Kubuntu
 Kubuntu Focus
 LibreOffice
 Linux
+linux admin
+linux fan
+linux gamer
+linux gaming
+linux meme
+linux mint
 Linux Mint
+linux sysadmin
+linux user
 LPIC
 macOS
 MacOS
@@ -102,7 +127,9 @@ NetBackup
 Netflix
 networking
 Networking
+network security
 Nintendo
+online safety
 OpenShift
 opensource
 open source
@@ -114,6 +141,8 @@ OpenVPN
 Palantir
 peneteration testing
 pentest
+pentesting
+phishing
 physics
 piezoelectric
 privacy
@@ -158,7 +187,9 @@ sles 13
 smartphone
 SN01
 SN02
+software
 Sony
+sophos
 SpaceX
 SSH
 sshd
@@ -195,6 +226,7 @@ Xbox
 Xbox One X
 Xbox Series X
 XPS13
+Xubuntu
 Zorin Grid
 zorinos
 Zorin OS
