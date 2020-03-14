@@ -5,6 +5,7 @@ Ansible
 Apple
 Argonne National Laboratory
 Artificial Intelligence
+Atlassian
 bash script
 BlackHole
 Bluetooth
@@ -34,6 +35,7 @@ computer
 computer engineering
 computer science
 container
+coronavirus
 Coronavirus
 cryptojacking
 cyber
@@ -68,15 +70,19 @@ Firefox
 firewall
 foldable
 FOSS
+FPGA
 FTL
 Galaxy Fold
 Galaxy S20
 Galaxy S20 Ultra
 Galaxy Z Flip
 geek
+GitHub
+GitLab
 GnuPG
 Goodle Chrome
 Google
+Google Cloud
 GPG
 hacker
 hacking
@@ -94,6 +100,7 @@ IT
 IT Security
 java
 javascript
+Jira
 Kali Linux
 KDE
 kernel
@@ -214,6 +221,7 @@ University of Rochester
 Unix
 Valve
 VMDK
+VMware
 vulnerability
 webdev
 Web developer
