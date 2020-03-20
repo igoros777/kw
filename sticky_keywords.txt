@@ -3,6 +3,7 @@ AMD
 anonymous
 Ansible
 Apple
+Arch Linux
 Argonne National Laboratory
 Artificial Intelligence
 Atlassian
@@ -59,14 +60,17 @@ Elon Musk
 encryption
 endpoint
 engineering
+Erlang
 ethical hacker
 ethical hacking
 Evernote
 exploit
 extortion attack
 facial recognition
+Fedora 32
 Final Fantasy
 Firefox
+Firejail
 firewall
 foldable
 FOSS
@@ -111,6 +115,7 @@ Kubuntu Focus
 LibreOffice
 Linux
 linux admin
+Linux Arch
 linux fan
 linux gamer
 linux gaming
@@ -123,6 +128,7 @@ LPIC
 macOS
 MacOS
 malware
+Manjaro
 materials science
 mechanical engineering
 Medtronic
@@ -136,6 +142,7 @@ networking
 Networking
 network security
 Nintendo
+OBS Studio
 online safety
 OpenShift
 opensource
@@ -181,6 +188,7 @@ rhel 7
 rhel 8
 risk management
 SaltStack
+Samba
 Samsung
 security
 Security
@@ -198,6 +206,7 @@ software
 Sony
 sophos
 SpaceX
+SQL
 SSH
 sshd
 Starship
@@ -220,6 +229,8 @@ University of Cambridge
 University of Rochester
 Unix
 Valve
+VirtualBox
+virtualization
 VMDK
 VMware
 vulnerability
@@ -230,11 +241,13 @@ Wii
 Windows
 Windows 10
 Windows 7
+Windows Defender
 Xbox
 Xbox One X
 Xbox Series X
 XPS13
 Xubuntu
+YouTube
 Zorin Grid
 zorinos
 Zorin OS
