@@ -144,7 +144,6 @@ SaltStack
 scripting
 searchsploit
 security
-secutiy
 Serverless
 sharepoint
 shellscript
