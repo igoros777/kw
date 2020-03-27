@@ -47,9 +47,13 @@ for ((i = 0; i < ${#countries[@]}; i++))
 do
 	c="${countries[$i]}"
 	c="$(echo ${c} | sed 's/^ //g')"
-	confirmed=$(awk -F, -v c="$c" '$2 == c' "${tmpfile}" | awk -F, '{s+=$4}END{print s}')
-	deaths=$(awk -F, -v c="$c" '$2 == c' "${tmpfile}" | awk -F, '{s+=$5}END{print s}')
-	recovered=$(awk -F, -v c="$c" '$2 == c' "${tmpfile}" | awk -F, '{s+=$6}END{print s}')
+	country_field=$(awk -F, 'NR==1{for(i=1;i<=NF;i++)if($i~/Country.Region/)f[n++]=i}{for(i=0;i<n;i++)printf"%s%s",i?" ":"",f[i];print""}' "${tmpfile}" | sort -u | head -1)
+	confirmed_field=$(awk -F, 'NR==1{for(i=1;i<=NF;i++)if($i~/Confirmed/)f[n++]=i}{for(i=0;i<n;i++)printf"%s%s",i?" ":"",f[i];print""}' "${tmpfile}" | sort -u | head -1)
+	deaths_field=$(awk -F, 'NR==1{for(i=1;i<=NF;i++)if($i~/Deaths/)f[n++]=i}{for(i=0;i<n;i++)printf"%s%s",i?" ":"",f[i];print""}' "${tmpfile}" | sort -u | head -1)
+	recovered_field=$(awk -F, 'NR==1{for(i=1;i<=NF;i++)if($i~/Recovered/)f[n++]=i}{for(i=0;i<n;i++)printf"%s%s",i?" ":"",f[i];print""}' "${tmpfile}" | sort -u | head -1)
+	confirmed=$(awk -F, -v c="$c" -v field=$country_field '$field == c' "${tmpfile}" | awk -v field=$confirmed_field -F, '{s+=$field}END{print s}')
+	deaths=$(awk -F, -v c="$c" -v field=$country_field '$field == c' "${tmpfile}" | awk -v field=$deaths_field -F, '{s+=$field}END{print s}')
+	recovered=$(awk -F, -v c="$c" -v field=$country_field '$field == c' "${tmpfile}" | awk -v field=$recovered_field -F, '{s+=$field}END{print s}')
 	death_pct="$(echo "scale=1;(${deaths}*100)/${confirmed}"|bc -l)"
 	recovery_pct="$(echo "scale=1;(${recovered}*100)/${confirmed}"|bc -l)"
 	active_cases="$(echo "scale=0;${confirmed}-(${deaths}+${recovered})"|bc -l)"
