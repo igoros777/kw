@@ -1,5 +1,9 @@
 #!/bin/bash
 # Parse Twitter's 'tweet.js' data file and delete old posts that have no likes or retweets
+# For details see https://www.igoroseledko.com/installing-t-cli-power-tool-for-twitter/
+# Extract tweet.js from Twitter data archive and remove this string from it:
+# window.YTD.tweet.part0 =
+# Make sure the first line of the file now begins with a left square bracket [
 
 if [ -z "${1}" ]; then
   echo "Specify the location of tweet.js"
@@ -26,9 +30,9 @@ if [ ! -x "${T}" ]; then
   echo "Unable to access ${T}"
   exit 1
 fi
-
 read -r ux <<<$(${T} accounts | sed 'N;s/\n/ /' | grep "${u}" | awk '{print $2}')
 ${T} set active ${u} ${ux}
+
 
 f="$(mktemp)"
 mt="$(date -d '3 months ago' +'%s')"
@@ -45,15 +49,17 @@ id_check() {
   fi
 }
 
-cat "${infile}" | \
-jq -r '.[] | .[] | .id + "@" + .favorite_count + "@" + .retweet_count + "@" + .created_at' 2>/dev/null | while read line
-do
-  id="$(echo "${line}" | awk -F'@' '{print $1}')"
-  fc="$(echo "${line}" | awk -F'@' '{print $2}')"
-  rc="$(echo "${line}" | awk -F'@' '{print $3}')"
-  ct="$(date -d "$(echo "${line}" | awk -F'@' '{print $4}')" +'%s')"
+line_parse() {
+  read id <<<"$(cut -d@ -f1 <<<"${line}")"
+  read fc <<<"$(cut -d@ -f2 <<<"${line}")"
+  read rc <<<"$(cut -d@ -f3 <<<"${line}")"
+  ct="$(date -d "$(cut -d@ -f4 <<<"${line}")" +'%s')"
   id_check &
-done
+}
 
-#t delete status -f $(cat $f | xargs -n100 -P$(grep -c proc /proc/cpuinfo)) 2>/dev/null
+jq -r '.[] | .[] | .id + "@" + .favorite_count + "@" + .retweet_count + "@" + .created_at' 2>/dev/null <"${infile}" | while read line
+do
+  line_parse &
+done
+#${T} delete status -f $(sort -u "${f}" | xargs -n100 -P$(grep -c proc /proc/cpuinfo)) 2>/dev/null
 #/bin/rm -f "${f}"
