@@ -7,6 +7,12 @@ configure() {
   project="$(shuf -i 100000-999999 -n 1)"
   mkdir -p ${basedir}/tmp
   mkdir -p ${basedir}/cookies
+  if [ ! -d "${basedir}/scripts" ]; then
+    mkdir -p ${basedir}/scripts
+    for i in facebook_login.js phantomjs_render.js; do
+      curl -s0 -k -q -o ${basedir}/scripts/${i} https://raw.githubusercontent.com/igoros777/kw/master/${i}
+    done
+  fi
   mkdir -p ${basedir}/data/${project}
   cookies=${basedir}/cookies/phantomjs_cookies.txt
   progress=${basedir}/data/${project}/progress.txt
