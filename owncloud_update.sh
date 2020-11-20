@@ -19,12 +19,19 @@ function func_configure() {
   mustbe="root"                                 # privileged user to run this update; usually root
   httpd_user="apache"                           # user running the Web server process; usually apache or www-data
   httpd_group="apache"                          # primary group of the user running the Web server process; usually apache or www-data
-  web_root="/var/www"                           # path where current 'owncloud' folder is located
+  web_root="/data/htdocs/comradegeneral.com"    # path where current 'owncloud' folder is located
   owncloud_folder="owncloud"                    # name of the ownCloud folder; by default is 'owncloud'
   db_user="root"                                # database user
   db_host="localhost"                           # database server
   db_name="owncloud"                            # database name
-  backup_dir="/opt/backups"                     # backup directory
+  echo "Checking disk consumption for ${web_root}/${owncloud_folder}"
+  space_required="$(du -sh ${web_root}/${owncloud_folder} | awk '{print $1}')"
+  echo ""
+  df -hP
+  echo ""
+  echo -n "Specify backup destination (needs at least ${space_required}): "
+  read -a backup_dir
+  echo ""
 # ----------------------------------------------------------------------------
   this_time="$(date +'%Y-%m-%d_%H%M%S')"
   this_host="$(hostname | awk -F'.' '{print $1}')"
@@ -43,6 +50,7 @@ function func_checkuser() {
 function func_get_dbpass() {
   echo -n "Enter password for database user ${db_user}: "
   read -s db_pass
+  echo ""
   if [ -z "${db_pass}" ]
   then
     echo "Database password cannot be null. Exiting..."
@@ -55,6 +63,7 @@ function func_get_dbpass() {
 function func_get_version() {
   echo -n "Enter ownCloud version to install (i.e. 10.1.0): "
   read owncloud_version
+  echo ""
   if [ -z "${owncloud_version}" ]
   then
     echo "Application version cannot be null. Exiting..."
@@ -71,7 +80,7 @@ function func_get_version() {
 }
 
 function func_validate() {
-  /bin/cd ~
+  cd ~
   httpd_user_real="$(ps -ef | grep [h]ttpd | grep -v ^root | head -1 | awk '{print $1}')"
   if [ "${httpd_user}" != "${httpd_user_real}" ]
   then
@@ -85,7 +94,7 @@ function func_validate() {
   fi
   if [ ! -d "${web_root}/${owncloud_folder}" ]
   then
-    echo "The specified ownCloud location does not exist: ${web_root}/${owncloud}. Exiting..."
+    echo "The specified ownCloud location does not exist: ${web_root}/${owncloud_folder}. Exiting..."
     exit 105
   fi
   db_check="$(${MYSQL} "show tables;" 2>/dev/null | grep -c comments)"
@@ -115,11 +124,11 @@ function func_validate() {
 }
 
 function func_backup_do() {
-  echo "Backing up ${web_root}/${owncloud} to ${backup_dir}/${owncloud_folder}_${this_time}.tgz"
-  tar cfz "${backup_dir}/${owncloud_folder}_${this_time}.tgz" "${web_root}/${owncloud}" 2>/dev/null
+  echo "Backing up ${web_root}/${owncloud_folder} to ${backup_dir}/${owncloud_folder}_${this_time}/"
+  rsync -aKx "${web_root}/${owncloud_folder}"/ "${backup_dir}/${owncloud_folder}_${this_time}"/ 2>/dev/null
   if [ ${?} -ne 0 ]
   then
-    echo "Backup of ${web_root}/${owncloud} failed. Exiting..."
+    echo "Backup of ${web_root}/${owncloud_folder} failed. Exiting..."
     exit 142
   fi
   echo "Backing up database ${db_name} to ${backup_dir}/${db_name}_${this_time}.sql"
@@ -137,7 +146,7 @@ function func_service_stop() {
   echo "Stopping Web server"
   /sbin/service httpd stop
   sleep 3
-  if [ $(ps -ef | grep -c [h]ttpd) -gt 0 ]
+  if [ $(ps -ef | grep -c [s]bin/httpd) -gt 0 ]
   then
     echo "Unable to stop httpd. Exiting..."
     exit 203
@@ -195,8 +204,8 @@ function func_upgrade_do() {
     exit 230
   fi
   echo "Setting ${web_root}/${owncloud_folder} ownership"
-  chmod -R ${httpd_user}:${httpd_group} "${web_root}/owncloud"
-  /bin/mv "${web_root}/owncloud" "${web_root}/${owncloud_folder}"
+  chown -R ${httpd_user}:${httpd_group} "${web_root}/owncloud"
+  /bin/mv "${web_root}/owncloud" "${web_root}/${owncloud_folder}" 2>/dev/null
   echo "Deleting new config and data folders"
   /bin/rm -rf "${web_root}/${owncloud_folder}/data" 2>/dev/null
   /bin/rm -rf "${web_root}/${owncloud_folder}/config" 2>/dev/null
@@ -205,7 +214,7 @@ function func_upgrade_do() {
   /bin/mv "${web_root}/${owncloud_folder}_${this_time}/config" "${web_root}/${owncloud_folder}/"
   func_service_start
   echo "Running ownCloud update"
-  /usr/bin/sudo -u ${http_user} php "${web_root}/${owncloud_folder}/occ" upgrade
+  /usr/bin/sudo -u ${httpd_user} php "${web_root}/${owncloud_folder}/occ" upgrade
   func_disable_maintmode
 }
 
