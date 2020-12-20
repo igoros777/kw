@@ -34,6 +34,7 @@ rulem ()  {
 
 tmpfile="$(mktemp)"
 tmpfootnotes="$(mktemp)"
+
 e="$(date +'%m-%d-%Y')"
 curl_get
 
@@ -41,6 +42,12 @@ if [ ! -s "${tmpfile}" ]
 then
 	e="$(date -d'-1 days' +'%m-%d-%Y')"
 	curl_get
+fi
+
+if [ ! -s "${tmpfile}" ]
+then
+	echo "Unable to download CSV file. Exiting..."
+	exit 1030
 fi
 
 if [ ! -s "${tmpfile}" ]
