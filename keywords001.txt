@@ -10,6 +10,7 @@ asciinema
 bashscript
 BigData
 botnet
+Btrfs
 bugbountytips
 ccna
 CentOS
@@ -120,6 +121,8 @@ networksecurity
 onionrouting
 OpenShift
 opensource
+Oracle
+OracleLinux
 pentest
 pentesting
 Perl
@@ -146,6 +149,7 @@ RedHatEnterpriseLinux
 rentaksejuta
 reposync
 RHEL
+RockyLinux
 SaltStack
 SATA
 scripting
@@ -180,4 +184,5 @@ webdeveloper
 webdevelopment
 windows
 Windows10
+WordPress
 XFS
