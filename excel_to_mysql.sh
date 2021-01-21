@@ -36,7 +36,7 @@ configure() {
   else
     datafile="${datafilexls%.*}.csv"
   fi
-	if [ ! "${db_host}" ] || [ ! "${db_name}" || [ ! "${db_user}" ]
+	if [ ! "${db_host}" ] || [ ! "${db_name}" ] || [ ! "${db_user}" ]
 	then
 		help
 		exit 15
