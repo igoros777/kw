@@ -1,20 +1,60 @@
 #!/bin/bash
-datafilexls="${1}"
-tbl_name="${2}"
+while getopts ":f:h:d:u:p:t:" OPTION
+do
+	case "${OPTION}" in
+    f)
+			datafilexls="${OPTARG}" ;;
+		h)
+			db_host="${OPTARG}" ;;
+		d)
+			db_name="${OPTARG}" ;;
+    u)
+  		db_user="${OPTARG}" ;;
+    p)
+  		db_pass="${OPTARG}" ;;
+    t)
+      tbl_name="${OPTARG}" ;;
+		\? ) echo "Unknown option: -$OPTARG" >&2; usage;;
+    :  ) echo "Missing option argument for -$OPTARG" >&2; usage;;
+    *  ) echo "Unimplemented option: -$OPTARG" >&2; usage;;
+	esac
+done
 
+help() {
+	this_script=$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")
+cat << EOF
+	SYNTAX:
+		${this_script} -f /path/to/spreadsheet.xlsx -h <db_host> -d <db_name> -u <db_user> [-p <db_pass>] [-t <table_name>]
+EOF
+}
 
 configure() {
   if [ -z "${datafilexls}" ] || [ ! -f "${datafilexls}" ]
   then
-    echo "Specify valid input filename. Exiting..."
+    help
     exit 11
   else
     datafile="${datafilexls%.*}.csv"
   fi
-  this_script=$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")
+	if [ ! "${db_host}" ] || [ ! "${db_name}" || [ ! "${db_user}" ]
+	then
+		help
+		exit 15
+	fi
+	if [ ! "${db_pass}" ]
+	then
+		echo -n "Enter password for ${db_user}: "
+		read -s db_pass
+		echo
+		if [ ! "${db_pass}" ]
+		then
+			help
+			exit 19
+		fi
+	fi
   if [ ! "${tbl_name}" ]
   then
-    tbl_name="${this_script/\.sh/_tbl}"
+    tbl_name="$(basename $datafilexls | sed 's/\./_/g')"
     echo "Data will be loaded into ${tbl_name}"
   fi
   tmpdir="/var/tmp"
@@ -23,7 +63,6 @@ configure() {
   if [ -f "${table_create_sql}" ]; then /bin/rm -f "${table_create_sql}"; fi
   table_load_sql="${tmpdir}/${this_script}_table_load.sql"
   if [ -f "${table_load_sql}" ]; then /bin/rm -f "${table_load_sql}"; fi
-  db_host="amidala.wil.csc.local" ; db_user="root" ; db_pass="bh10236" ; db_name="sysinfo"
   MYSQL="/usr/bin/mysql --batch --skip-column-names --max_allowed_packet=100M -h${db_host} -u${db_user} -p${db_pass} ${db_name} -e"
   MYSQL2="/usr/bin/mysql --batch --skip-column-names --max_allowed_packet=100M -h${db_host} -u${db_user} -p${db_pass} ${db_name}"
 }
