@@ -54,7 +54,7 @@ configure() {
 	fi
   if [ ! "${tbl_name}" ]
   then
-    tbl_name="$(basename $datafilexls | sed 's/\./_/g')"
+    tbl_name="$(basename $datafilexls | sed -e 's/\./_/g' -e 's/\-/_/g' -e 's/ /_//g')"
     echo "Data will be loaded into ${tbl_name}"
   fi
   tmpdir="/var/tmp"
