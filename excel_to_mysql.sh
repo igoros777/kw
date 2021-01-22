@@ -102,9 +102,9 @@ CREATE TABLE ${tbl_name} (
   do
     if [ ! -z "${line}" ]
     then
-      echo "\`${line}\` VARCHAR(45),"
+      echo "\`${line}\` VARCHAR(255),"
     else
-      echo "\`field_${i}\` VARCHAR(45),"
+      echo "\`field_${i}\` VARCHAR(255),"
     fi
     (( i = i + 1 ))
   done)
