@@ -98,7 +98,7 @@ cat << EOF > "${table_create_sql}"
 CREATE TABLE ${tbl_name} (
 \`id\` INT(11) NOT NULL AUTO_INCREMENT,
   $(i=1; head -1 "${datafile}" | tr , '\n' | sed -r 's/ /_/g' | sed -r 's/[\(\)]//g' | \
-  sed -e 's/\(.*\)/\L\1/' | sed 's@/@_@g' | sed 's/->/to/g' | while read line
+  sed -e 's/\(.*\)/\L\1/' | sed 's@/@_@g' | sed 's/->/to/g' | sed 's/ $//g' | while read line
   do
     if [ ! -z "${line}" ]
     then
