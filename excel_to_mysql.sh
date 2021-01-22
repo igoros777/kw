@@ -1,4 +1,17 @@
 #!/bin/bash
+#
+#                                      |
+#                                  ___/"\___
+#                          __________/ o \__________
+#                            (I) (G) \___/ (O) (R)
+#                                   Igor Os
+#                               igor@igoros.com
+#                               www.igoros.com
+#                                 2021-01-22
+# ----------------------------------------------------------------------------
+# Convert a basix Excel spreadsheet into a database table
+# ----------------------------------------------------------------------------
+
 while getopts ":f:h:d:u:p:t:" OPTION
 do
 	case "${OPTION}" in
@@ -29,32 +42,33 @@ EOF
 }
 
 configure() {
-  if [ -z "${datafilexls}" ] || [ ! -f "${datafilexls}" ]
-  then
+  if [ -z "${datafilexls}" ] || [ ! -f "${datafilexls}" ]; then
     help
     exit 11
   else
     datafile="${datafilexls%.*}.csv"
   fi
-	if [ ! "${db_host}" ] || [ ! "${db_name}" ] || [ ! "${db_user}" ]
-	then
+	if [ ! "${db_name}" ]; then
 		help
 		exit 15
 	fi
-	if [ ! "${db_pass}" ]
-	then
+	if [ ! "${db_user}" ]; then
+		db_user="$(whoami)"
+	fi
+	if [ ! "${db_host}" ]; then
+		db_host="localhost"
+	fi
+	if [ ! "${db_pass}" ]; then
 		echo -n "Enter password for ${db_user}: "
 		read -s db_pass
 		echo
-		if [ ! "${db_pass}" ]
-		then
+		if [ ! "${db_pass}" ]; then
 			help
 			exit 19
 		fi
 	fi
-  if [ ! "${tbl_name}" ]
-  then
-    tbl_name="$(basename $datafilexls | sed -e 's/\./_/g' -e 's/\-/_/g' -e 's/ /_//g')"
+  if [ ! "${tbl_name}" ]; then
+    tbl_name="$(basename "${datafilexls}" | sed -e 's/\./_/g' -e 's/\-/_/g' -e 's/ /_//g')"
     echo "Data will be loaded into ${tbl_name}"
   fi
   tmpdir="/var/tmp"
@@ -69,8 +83,7 @@ configure() {
 
 xls_convert() {
   unoconv -i FilterOptions=44,34,76,2,1/5/2/1/3/1/4/1 -f csv -d spreadsheet -o "${datafile}" "${datafilexls}"
-  if [ ! -f "${datafile}" ]
-  then
+  if [ ! -f "${datafile}" ]; then
     echo "Unable to convert "${datafilexls}" to CSV. Exiting..."
     exit 22
   fi
