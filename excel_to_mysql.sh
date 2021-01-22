@@ -37,7 +37,7 @@ help() {
 	this_script=$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")
 cat << EOF
 	SYNTAX:
-		${this_script} -f /path/to/spreadsheet.xlsx -h <db_host> -d <db_name> -u <db_user> [-p <db_pass>] [-t <table_name>]
+		${this_script} -f /path/to/spreadsheet.xlsx -d <db_name> [-u <db_user>] [-h <db_host>] [-p <db_pass>] [-t <table_name>]
 EOF
 }
 
