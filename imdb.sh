@@ -40,13 +40,15 @@ get_imdb() {
 }
 
 parse_imdb() {
-	year="$(grep -m 1 "\/year\/" "${tmpfile}" | grep -Eo "[0-9]{4}")"
-	title="$(grep -m 1 "og:title" "${tmpfile}" | grep -Eo '\".*\"' | sed -e 's/"//g' | sed 's/ - IMDb//g' | sed -r 's/ \([0-9]{4}\)//g' | sed 's@/@ @g')"
-	temp="$(grep "og:description" "${tmpfile}" | sed -e 's/content="/@/g' -e 's/" \/>/@/g' -e 's/\&quot;/\"/g' | awk -F'@' '{print $(NF-1)}')"
+	year="$(grep -oP "(?<=\"Certificate\"},\"releaseYear\":{\"year\":)[0-9]{4}(?=,\"endYear\")" $tmpfile)"
+	title="$(grep -oP "(?<=\<meta property=\"og:title\" content=\").*(?= - IMDb\"/\>\<meta property=\"og:description\")" $tmpfile | sed -r 's/ \([0-9]{4}\)//g' | sed -r 's/&quot;//g')"
+
+
+	temp="$(grep -oP "(?<=\"property\":\"og:description\",\"content\":\").*(?=\"}\],\[\"meta\",{\"property\":\"og:type\")" $tmpfile)"
 	director="$(echo ${temp} | grep -oP "(?<=Directed by ).*?(?=\. With)")"
 	cast="$(echo ${temp} | grep -oP "(?<=\. With ).* ?(?=\. [A-Z0-9])" | sed -r 's/([A-Z]{1})\./\1@/g' | awk -F'.' '{print $1}' | sed -r 's/@/\./g')"
 	plot="$(echo ${temp} | sed -r "s/${cast}\. /@/g" | awk -F'@' '{print $NF}')"
-	rating="$(grep -m 1 -oP "[0-9]\.?[0-9]?\<span class=\"ofTen\"\>/10" "${tmpfile}" | sed -r 's/<.*>//g')"
+	rating="$(grep -oP "(?<=,\"ratingValue\":)[0-9]{1}(\.[0-9]{1})?(?=},)" $tmpfile)"
 }
 
 get_imdb2() {
