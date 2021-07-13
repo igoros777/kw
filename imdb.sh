@@ -25,6 +25,18 @@ cleanup() {
 	fi
 }
 
+parse_imdb() {
+	year="$(grep -oP "(?<=\<title\>).*(?=\</title\>)" $tmpfile | grep -oP "(?<=\()[0-9]{4}(?=\))" | head -1)"
+	title="$(grep -oP "(?<=\<meta property=\"og:title\" content=\").*(?= - IMDb\"/\>\<meta property=\"og:description\")" $tmpfile | sed -r 's/ \([0-9]{4}\)//g' | recode html)"
+
+
+	temp="$(grep -oP "(?<=\"property\":\"og:description\",\"content\":\").*(?=\"}\],\[\"meta\",{\"property\":\"og:type\")" $tmpfile)"
+	director="$(echo ${temp} | grep -oP "(?<=Directed by ).*?(?=\. With)")"
+	cast="$(echo ${temp} | grep -oP "(?<=\. With ).* ?(?=\. [A-Z0-9])" | sed -r 's/([A-Z]{1})\./\1@/g' | awk -F'.' '{print $1}' | sed -r 's/@/\./g')"
+	plot="$(echo ${temp} | sed -r "s/${cast}\. /@/g" | awk -F'@' '{print $NF}')"
+	rating="$(grep -oP "(?<=,\"ratingValue\":)[0-9]{1}(\.[0-9]{1})?(?=},)" $tmpfile)"
+}
+
 get_imdb() {
 	if [ ! -z "${y}" ]
 	then
@@ -37,35 +49,30 @@ get_imdb() {
 	else
 		${LYNX} "https://www.google.com/search?q=site:imdb.com+%22${t}%22&btnI" > ${tmpfile} 2> /dev/null
 	fi
-}
-
-parse_imdb() {
-	year="$(grep -oP "(?<=\"Certificate\"},\"releaseYear\":{\"year\":)[0-9]{4}(?=,\"endYear\")" $tmpfile)"
-	title="$(grep -oP "(?<=\<meta property=\"og:title\" content=\").*(?= - IMDb\"/\>\<meta property=\"og:description\")" $tmpfile | sed -r 's/ \([0-9]{4}\)//g' | sed -r 's/&quot;//g')"
-
-
-	temp="$(grep -oP "(?<=\"property\":\"og:description\",\"content\":\").*(?=\"}\],\[\"meta\",{\"property\":\"og:type\")" $tmpfile)"
-	director="$(echo ${temp} | grep -oP "(?<=Directed by ).*?(?=\. With)")"
-	cast="$(echo ${temp} | grep -oP "(?<=\. With ).* ?(?=\. [A-Z0-9])" | sed -r 's/([A-Z]{1})\./\1@/g' | awk -F'.' '{print $1}' | sed -r 's/@/\./g')"
-	plot="$(echo ${temp} | sed -r "s/${cast}\. /@/g" | awk -F'@' '{print $NF}')"
-	rating="$(grep -oP "(?<=,\"ratingValue\":)[0-9]{1}(\.[0-9]{1})?(?=},)" $tmpfile)"
+	parse_imdb
 }
 
 get_imdb2() {
-	if [ -z "${year}" ]
+	if [ -z "${title}" ]
 	then
-		m=$(echo "${l}" | sed 's/ [Aa]nd / \& /g')
-		${LYNX} "https://www.imdb.com/title/${m}/" > ${tmpfile} 2> /dev/null
-		parse_imdb
+		if [ -z "${year}" ]
+		then
+			m=$(echo "${l}" | sed 's/ [Aa]nd / \& /g')
+			${LYNX} "https://www.imdb.com/title/${m}/" > ${tmpfile} 2> /dev/null
+			parse_imdb
+		fi
 	fi
 }
 
 get_imdb3() {
-	if [ -z "${year}" ]
+	if [ -z "${title}" ]
 	then
-		#${LYNX} "https://www.google.com/search?q=site:imdb.com+%22${t}%22&btnI" > ${tmpfile} 2> /dev/null
-		${LYNX} "$(${LYNX} "https://www.google.com/search?q=site:imdb.com+${t} (${y})&btnI" 2>/dev/null | grep -oE "(https?|ftps?)://[^\<\>\"\' ]+" | grep imdb | tail -1)" > ${tmpfile} 2> /dev/null
-		parse_imdb
+		if [ -z "${year}" ]
+		then
+			#${LYNX} "https://www.google.com/search?q=site:imdb.com+%22${t}%22&btnI" > ${tmpfile} 2> /dev/null
+			${LYNX} "$(${LYNX} "https://www.google.com/search?q=site:imdb.com+${t} (${y})&btnI" 2>/dev/null | grep -oE "(https?|ftps?)://[^\<\>\"\' ]+" | grep imdb | tail -1)" > ${tmpfile} 2> /dev/null
+			parse_imdb
+		fi
 	fi
 }
 
