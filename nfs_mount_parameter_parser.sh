@@ -41,26 +41,29 @@
 #VAR,mountpoint,unknown
 #VAR,mountport,0
 #VAR,mountproto,unknown
-#VAR,mountvers,unknown
+#VAR,mountvers,3
 #VAR,namlen,255
 #VAR,nconnect,1
 #VAR,nfs_client,unknown
 #VAR,nfs_server,unknown
 #VAR,noac,unset
+#VAR,devs,devs
 #VAR,proto,unknown
 #VAR,rdirplus,rdirplus
 #VAR,relatime,relatime
 #VAR,resvport,resvport
-#VAR,retrans,unknown
-#VAR,rsize,unknown
-#VAR,rw_ro,unknown
+#VAR,retrans,1
+#VAR,retry,1
+#VAR,rsize,8192
+#VAR,rw_ro,rw
 #VAR,sec,unknown
 #VAR,sharecache,sharecache
 #VAR,softreval,nosoftreval
 #VAR,strictatime,strictatime
-#VAR,timeo,600
-#VAR,version,unknown
-#VAR,wsize,unknown
+#VAR,suid,suid
+#VAR,timeo,7
+#VAR,version,3
+#VAR,wsize,8192
 
 configure() {
   this_script=$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")
@@ -95,6 +98,7 @@ parse() {
     addr="$(grep -oP "(?<=(,| )addr=)(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))(?=(,| ))" <<<"${line}")"
     clientaddr="$(grep -oP "(?<=(,| )clientaddr=)(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))(?=(,| ))" <<<"${line}")"
     cto="$(grep -oP "(?<=(,| ))(no)?cto(?=(,| ))" <<<"${line}")"
+    devs="$(grep -oP "(?<=(,| ))(no)?devs(?=(,| ))" <<<"${line}")"
     diratime="$(grep -oP "(?<=(,| ))(no)?diratime(?=(,| ))" <<<"${line}")"
     fg_bg="$(grep -oP "(?<=(,| ))(f|b)g(?=(,| ))" <<<"${line}")"
     fileshare="$(awk -F: '{print $2}' <<<"${line}" | awk '{print $1}' | sed -r 's/(\\)?040/ /g')"
@@ -122,12 +126,14 @@ parse() {
     relatime="$(grep -oP "(?<=(,| ))(no)?relatime(?=(,| ))" <<<"${line}")"
     resvport="$(grep -oP "(?<=(,| ))(no)?resvport(?=(,| ))" <<<"${line}")"
     retrans="$(grep -oP "(?<=(,| )retrans=)[0-9]{1,}(?=(,| ))" <<<"${line}")"
+    retry="$(grep -oP "(?<=(,| )retry=)[0-9]{1,}(?=(,| ))" <<<"${line}")"
     rsize="$(grep -oP "(?<=(,| )rsize=)[0-9]{1,}(?=(,| ))" <<<"${line}")"
     rw_ro="$(grep -oP "(?<=(,| ))r(w|o)(?=(,| ))" <<<"${line}")"
     sec="$(grep -oP "(?<=(,| )sec=)[[:alnum:]]{1,}(?=(,| ))" <<<"${line}")"
     sharecache="$(grep -oP "(?<=(,| ))(no)?sharecache(?=(,| ))" <<<"${line}")"
     softreval="$(grep -oP "(?<=(,| ))(no)?softreval(?=(,| ))" <<<"${line}")"
     strictatime="$(grep -oP "(?<=(,| ))(no)?strictatime(?=(,| ))" <<<"${line}")"
+    suid="$(grep -oP "(?<=(,| ))(no)?suid(?=(,| ))" <<<"${line}")"
     timeo="$(grep -oP "(?<=(,| )timeo=)[0-9]{1,}(?=(,| ))" <<<"${line}")"
     version="$(grep -oP "(?<=(,| )vers\=)[[:alnum:]]{1,}(?=(,| ))" <<<"${line}")"
     wsize="$(grep -oP "(?<=(,| )wsize=)[0-9]{1,}(?=(,| ))" <<<"${line}")"
