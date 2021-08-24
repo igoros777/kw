@@ -31,6 +31,7 @@ configure() {
   outfile="${outdir}/nfsiostat_${this_host}_${this_time}.csv"
   tmpfile=$(mktemp)
   if [ -z "${interval}" ] || [ -z "${count}" ] || [ -z "${fs}" ]; then exit 21; fi
+  mountpoint "${fs}" 2>/dev/null 1>&2 || exit 21
   NFSIOSTAT=$(which nfsiostat 2>/dev/null) || exit 23
   TIMEOUT=$(which timeout 2>/dev/null) || exit 25
   UNBUFFER=$(which unbuffer 2>/dev/null) || exit 25
@@ -39,7 +40,7 @@ configure() {
 
 do_nfsiostat() {
   (( timer = ( interval * count ) + 1 ))
-  ${TIMEOUT} ${timer} ${NFSIOSTAT} 2 2>/dev/null | ${UNBUFFER} -p grep --line-buffer -v o | \
+  ${TIMEOUT} ${timer} ${NFSIOSTAT} ${interval} ${count} "${fs}" 2>/dev/null | ${UNBUFFER} -p grep --line-buffer -v o | \
   ${UNBUFFER} -p ts '%Y-%m-%d_%H:%M:%S' | grep --line-buffer '\.' >> "${outfile}"
   ${DOS2UNIX} "${outfile}"
   sed -i 'N;N;s/\n/ /g' "${outfile}"
