@@ -68,6 +68,16 @@
         ],
         "mime": "application/msword"
     },
+    "docm": {
+        "signs": [
+            "0,504b030414000600080000002100d8d58921c40100008107000013000802",
+            "0,CF11E0A1B11AE100",
+            "0,D0CF11E0A1B11AE1",
+            "0,DBA52D00",
+            "512,ECA5C100"
+        ],
+        "mime": "application/msword"
+    },
     "dotx": {
         "signs": [
             "0,504b0304140006000800f8b55d41c1dd96903d020000c00a00001300e701",
