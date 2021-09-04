@@ -14,7 +14,7 @@ timeout 5 curl --max-time 4 -s0 -l -k "${m_url}" | grep -v "'" > ${m} || exit 1
 
 rnd() {
   e="$(echo "${x}" | xargs -n1 | shuf -n1)"
-  f="$(shuf -n $((1 + $RANDOM % 4)) "${w}" | xargs | sed 's/ /_/g')$(if (( RANDOM % 2 )); then if (( RANDOM % 2 )); then echo "_$((1 + $RANDOM % 100))"; else echo "_$(date +'%Y-%m-%d')"; fi; fi).${e}"
+  f="$(shuf -n $((1 + $RANDOM % 4)) "${w}" | xargs | sed 's/ /_/g')$(if (( RANDOM % 2 )); then if (( RANDOM % 2 )); then echo "_$((1 + $RANDOM % 100))"; else echo "_$(date -d"$((1 + $RANDOM % 365)) days ago" +'%Y-%m-%d')"; fi; fi).${e}"
   s=$((512 + $RANDOM % 100000))
   d="$(jq -r ".${e}.signs[]" "${m}" | head -1 | awk -F, '{print $2}')"
   o="$(jq -r ".${e}.signs[]" "${m}" | head -1 | awk -F, '{print $1}')"
