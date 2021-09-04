@@ -12,6 +12,12 @@
         ],
         "mime": "application/cpl+xml"
     },
+    "csv": {
+        "signs": [
+            "0,73657276657230312c30623063333232312c323031362d30352d31322031"
+        ],
+        "mime": "application/epub+zip"
+    },
     "epub": {
         "signs": [
             "0,504B03040A000200"
