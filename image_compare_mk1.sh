@@ -1,6 +1,6 @@
 #!/bin/bash
-fromdir="${1}"
-todir="${2}"
+fromdir="$(echo "${1}" | sed 's@/$@@g')"
+todir="$(echo "${2}" | sed 's@/$@@g')"
 outfile="$(mktemp)"
 
 fcount="$(find "${fromdir}" -type f -not -path "*/tmp/*" | wc -l)"
@@ -52,5 +52,10 @@ echo -e "Matching photos in ${outfile}:\n"
 cat "${outfile}" | column -s'^' -t
 echo -e "\n"
 echo -e "Unique photos in ${fromdir}:\n"
-sort -u <(comm -13 <(awk -F^ '{print $1}' "${outfile}" | sort) <(find "${fromdir}" -type f -not -path "*/tmp/*" | sort) | sed 's@/tmp@@g') \
-<(awk -F^ '{print $1,$2}' "${outfile}" | xargs | sed 's/ /\n/g' | sort | uniq -c | grep '\b1\b' | awk '{for (i=2; i<=NF; i++) print $i}')
+if [ "${fromdir}" == "${todir}" ]
+then
+  sort -u <(comm -13 <(awk -F^ '{print $1}' "${outfile}" | sort) <(find "${fromdir}" -type f -not -path "*/tmp/*" | sort) | sed 's@/tmp@@g') \
+  <(awk -F^ '{print $1,$2}' "${outfile}" | xargs | sed 's/ /\n/g' | grep -v "${todir}/" | sort | uniq -c | grep '\b1\b' | awk '{for (i=2; i<=NF; i++) print $i}')
+else
+  sort -u <(comm -13 <(awk -F^ '{print $1}' "${outfile}" | sort) <(find "${fromdir}" -type f -not -path "*/tmp/*" | sort) | sed 's@/tmp@@g')
+fi
