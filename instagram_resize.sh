@@ -99,9 +99,10 @@ image_process() {
       if (( $(echo "${rp} > 1" | bc -l) )) || (( $(echo "${rl} > 1" | bc -l) )); then
         image_convert "${i}"
       else
-        /bin/cp -p "${q}/${i}" "${t}/${i}"
+        convert "${q}/${i}" -resize "${msize}>" "${t}/${i}"
       fi
     else
+      echo "Resizing ${q}/${i} to ${t}/${o}"
       echo "Image ${i} may exceed your ImageMagick limits set in policy.xml"
     fi
   done
