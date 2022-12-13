@@ -30,7 +30,7 @@ parse_imdb() {
 	title="$(grep -oP "(?<=\<meta property=\"og:title\" content=\").*(?= - IMDb\"/\>\<meta property=\"og:description\")" $tmpfile | sed -r 's/ \([0-9]{4}\)//g' | recode html)"
 
 
-	temp="$(grep -oP "(?<=\"property\":\"og:description\",\"content\":\").*(?=\"}\],\[\"meta\",{\"property\":\"og:type\")" $tmpfile)"
+	temp="$(grep -oP "(?<=property=\"og:description\" content=\").*(?=\"\/><meta property=\"og:type\")" $tmpfile)"
 	director="$(echo ${temp} | grep -oP "(?<=Directed by ).*?(?=\. With)")"
 	cast="$(echo ${temp} | grep -oP "(?<=\. With ).* ?(?=\. [A-Z0-9])" | sed -r 's/([A-Z]{1})\./\1@/g' | awk -F'.' '{print $1}' | sed -r 's/@/\./g')"
 	plot="$(echo ${temp} | sed -r "s/${cast}\. /@/g" | awk -F'@' '{print $NF}')"
