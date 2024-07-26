@@ -15,6 +15,7 @@ if [ ! -s "$common_word_list_01" ]; then
     echo "Error: failed to download $common_word_list_01_url"
     exit 1
 fi
+tmpfile="$(mktemp)"
 
 common_word_list_custom_01="$HOME/common_word_list_custom_01.txt"
 if [ -f "$common_word_list_custom_01" ]; then
@@ -22,7 +23,7 @@ if [ -f "$common_word_list_custom_01" ]; then
     sort -u -o "$common_word_list_01" "$common_word_list_01"
 fi
 
-python3 <<EOF | column -t
+python3 <<EOF | column -t > "${tmpfile}"
 import nltk
 from nltk.tokenize import word_tokenize
 from collections import Counter
@@ -57,4 +58,31 @@ for count in sorted(grouped_words.keys(), reverse=True):
         print(f'{word}: {count}')
 EOF
 
-/bin/rm -f "$common_word_list_01"
+WN="$(which wn)"
+if [ -z "$WN" ]; then
+    cat "${tmpfile}"
+else
+    while read -r line; do
+        word=$(echo "$line" | awk -F: '{print $1}')
+        synonyms="$(${WN} "${word}" -synsn -synsv -synsr -synsa | 
+            awk '/^Sense [0-9]+/{getline; split($0, a, " "); print a[1], a[2], a[3], a[4]}' | 
+            sed 's/,$//g' | 
+            awk 'BEGIN{RS=ORS="\n"} 
+                { 
+                    gsub(/^ +| +$/, "", $0); 
+                    n = split($0, words, ", "); 
+                    for (i=1; i<=n; i++) {
+                        word = words[i];
+                        if (!(word in seen)) {
+                            seen[word]=1; 
+                            print word;
+                            if (++count == 10) exit;
+                        }
+                    }
+                }' | paste -sd, - | sed 's/,/, /g')"
+        echo -e "${line}\t${synonyms}"
+    done < "${tmpfile}"
+fi
+
+
+/bin/rm -f "$common_word_list_01" "$tmpfile"
