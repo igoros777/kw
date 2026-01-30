@@ -7,7 +7,7 @@ EOF
   exit 110
 }
 
-while getopts ":a:f:h:" OPTION; do
+while getopts ":a:f:h" OPTION; do
 	case "${OPTION}" in
 		a)
 			a="${OPTARG}"
