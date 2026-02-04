@@ -28,7 +28,7 @@ configure() {
   # Geocod.io API key
   v='v1.7'
   apibase="https://api.geocod.io/${v}"
-  api_key="YOUR_API_KEY_HERE"
+  api_key="Get your API key from https://www.geocod.io"
 }
 
 convert_function() {
