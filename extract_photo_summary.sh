@@ -13,6 +13,8 @@
 # Change Log:
 # ****************************************************************************
 # 2026-02-04	igor@igoros.com	Wrote this script
+# 2026-02-05	igor@igoros.com	Added geocoding functionality
+# 2026-02-06	igor@igoros.com	Added comment writing functionality
 # ****************************************************************************
 input_file="${1}"
 if [ -z "${input_file}" ] || [ ! -f "${input_file}" ]
@@ -28,7 +30,7 @@ configure() {
   # Geocod.io API key
   v='v1.7'
   apibase="https://api.geocod.io/${v}"
-  api_key="YOUR_API_KEY_HERE"
+  api_key="Get your API key from https://www.geocod.io"
 }
 
 convert_function() {
@@ -201,10 +203,32 @@ extract_metadata() {
   convert_function 
   location_out="${location:-Unknown Location}"
 
-  printf '%s | %s | ISO: %s | %s | %s | %s | WB: %s | Metering: %s | Flash: %s | ExpComp: %s | %s | %s | %s | %s\n' \
-    "${model}" "${lens}" "${iso}" "${aperture}" "${shutter}" "${focal}" "${wb}" "${meter}" "${flash}" "${exp_comp}" "${resolution}" "${color_space}" "${dt_human}" "${location_out}"
+  photo_summary="$(printf '%s | %s | ISO: %s | %s | %s | %s | WB: %s | Metering: %s | Flash: %s | ExpComp: %s | %s | %s | %s' \
+    "${model}" "${lens}" "${iso}" "${aperture}" "${shutter}" "${focal}" "${wb}" "${meter}" "${flash}" "${exp_comp}" "${resolution}" "${dt_human}" "${location_out}")"
+  echo "${photo_summary}"
 }
 export -f extract_metadata
+
+write_comment() {
+  local file="${input_file}"
+  local comment="${photo_summary}"
+  if [ -z "${comment}" ]; then
+    echo "Error: no summary to write" >&2
+    return 1
+  fi
+  if exiftool -overwrite_original \
+    -Comment="${comment}" \
+    -UserComment="${comment}" \
+    -IPTC:Caption-Abstract="${comment}" \
+    -XMP:Description="${comment}" \
+    "${file}" >/dev/null 2>&1; then
+    echo "Comment written to ${file}"
+  else
+    echo "Error: failed to write comment to ${file}" >&2
+    return 1
+  fi
+}
+export -f write_comment
 
 # ----------------------------------------------------------------------------
 # RUNTIME
@@ -214,4 +238,5 @@ export -f extract_metadata
 #                         *---o0o---*
 # ----------------------------------------------------------------------------
 configure
-extract_metadata 
+extract_metadata
+write_comment
